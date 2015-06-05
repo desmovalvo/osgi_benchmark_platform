@@ -22,7 +22,10 @@ rsib_ip = "localhost"
 rsib_port = 10010
 iterations = 5
 n3file = "sp2b.n3"
-
+d = str(datetime.datetime.now().strftime("%Y%m%d-%H%M"))
+chart_filename = "testSP2B_" + d + ".svg"
+text_filename = "testSP2B_" + d + ".txt"
+csv_filename = "testSP2B_" + d + ".csv"
 
 # read command line parameters
 try: 
@@ -130,12 +133,10 @@ for kp in kp_list:
 
 
 # initialize a chart
-chart_filename = "testSP2B_" + datetime.datetime.now().strftime("%Y%m%d-%H%M") + ".svg"
 bar_chart = pygal.Bar()
 bar_chart.title = """Time to perform the SP2B benchmark queries"""
 
 # initialize a csv file
-csv_filename = "testSP2B_" + datetime.datetime.now().strftime("%Y%m%d-%H%M") + ".csv"
 csvfile = open(csv_filename, "w")
 csvfile_writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 
@@ -165,3 +166,9 @@ bar_chart.render_to_file(chart_filename)
 
 # finalize the csv file
 csvfile.close()
+
+# writing test information on a file
+out_file = open(text_filename, "w")
+out_file.write("Total triples: " + str(counter) + "\n")
+out_file.write("Iterations: " + str(iterations) + "\n")
+out_file.close()

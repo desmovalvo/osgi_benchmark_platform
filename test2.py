@@ -53,6 +53,10 @@ multiplier = 10
 nsubs = 0
 sub = None
 sub_list = []
+d = str(datetime.datetime.now().strftime("%Y%m%d-%H%M"))
+chart_filename = "test2_" + d + ".svg"
+csv_filename = "test2_" + d + ".csv"
+text_filename = "test2_" + d + ".txt"
 
 # read command line arguments
 try: 
@@ -161,10 +165,6 @@ for kp in kp_list:
 #
 ############################################################
 
-# determine the filename
-chart_filename = "test2_" + datetime.datetime.now().strftime("%Y%m%d-%H%M") + ".svg"
-csv_filename = "test2_" + datetime.datetime.now().strftime("%Y%m%d-%H%M") + ".csv"
-
 # initialize the csv file
 csvfile = open(csv_filename, "w")
 csvfile_writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
@@ -197,9 +197,6 @@ bar_chart.render_to_file(chart_filename)
 # Save test details to file
 #
 ############################################################
-
-# determine the filename
-text_filename = "test2_" + datetime.datetime.now().strftime("%Y%m%d-%H%M") + ".txt"
 
 # write on the file
 out_file = open(text_filename, "w")
