@@ -148,7 +148,7 @@ for kp in kp_list:
             # close subscriptions
             print colored("post-test> ", "green", attrs=["bold"]) + "Closing subscriptions..."
             for s in sub_list:
-                kp.unsubscribe(s)
+                kp.load_unsubscribe(s)
     
         # elaborate results
         sum = 0
