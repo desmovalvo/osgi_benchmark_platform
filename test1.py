@@ -56,6 +56,8 @@ nsubs = 0
 sub = None
 sub_list = []
 d = str(datetime.datetime.now().strftime("%Y%m%d-%H%M"))
+
+# filenames
 chart_filename = "test1_" + d + ".svg"
 csv_filename = "test1_" + d + ".csv"
 text_filename = "test1_" + d + ".txt"
