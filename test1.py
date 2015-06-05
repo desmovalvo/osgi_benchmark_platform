@@ -3,6 +3,7 @@
 # requirements
 import csv
 import sys
+import time
 import pygal
 import getopt
 import timeit
@@ -79,22 +80,38 @@ try:
             nsubs = int(arg)
         elif opt in ("-q", "--sub"):
             sub = arg
-        else:
-            print colored("init> ", "red", attrs=['bold']) + "Unrecognized option " + str(opt)
-        
+
 except getopt.GetoptError:
     print colored("init> ", "red", attrs=["bold"]) + "Usage: python test1.py -o osib_ip:port -r rsib_ip:port -i iterations -b block_size -m multiplier -n nsubs -q subscription"
     sys.exit()
 
-# instantiate a KP
+# instantiate the KPs
 kp_list = []
-try:
-    print colored("init> ", "blue", attrs=["bold"]) + "connecting to the OSGi SIB"
-    kp_list.append(m3_kp_api(False, osib_ip, osib_port, "OSGi"))
-    print colored("init> ", "blue", attrs=["bold"]) + "connecting to the RedSIB"
-    kp_list.append(m3_kp_api(False, rsib_ip, rsib_port, "RedSIB"))
-except Exception as e:
-    print colored("init> ", "red", attrs=["bold"]) + e.__str__()
+conn_ok = False
+while not conn_ok:
+    try:
+        print colored("init> ", "blue", attrs=["bold"]) + "connecting to the SIBs"
+        kp_list.append(m3_kp_api(False, osib_ip, osib_port, "OSGi"))
+        kp_list.append(m3_kp_api(False, rsib_ip, rsib_port, "RedSIB"))
+        conn_ok = True
+    except Exception as e:
+        print colored("init> ", "red", attrs=["bold"]) + e.__str__()
+        print colored("init> ", "red", attrs=["bold"]) + "Error during connection, retrying in a while..."
+        time.sleep(3)
+
+# clean the SIBs
+clean_ok = False
+print colored("init> ", "blue", attrs=["bold"]) + "cleaning the SIBs"
+while not clean_ok:
+    try:
+        for kp in kp_list:
+            kp.load_rdf_remove([Triple(None, None, None)])
+        clean_ok = True
+    except Exception as e:
+        print colored("init> ", "red", attrs=["bold"]) + e.__str__()
+        print colored("init> ", "red", attrs=["bold"]) + "Error while cleaning the SIB, retrying in a while..."
+        time.sleep(3)
+
 
 # initialize a dictionary with the results
 results = {}
@@ -158,7 +175,7 @@ for kp in kp_list:
         sum = 0
         for r in range(len(res)):
             sum += elapsed_time
-        results[kp.__dict__["theSmartSpace"][0]][(m+1) * block_size] = round(sum / len(res), 2)
+        results[kp.__dict__["theSmartSpace"][0]][(m+1) * block_size] = round(sum / len(res), 3)
     
 
 ############################################################
