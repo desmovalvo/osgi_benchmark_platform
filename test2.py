@@ -70,7 +70,7 @@ try:
             block_size = int(arg)
         elif opt in ("-m", "--multiplier"):
             multiplier = int(arg)
-        elif opt in ("--s", "--sub_block_size"):
+        elif opt in ("-s", "--sub_block_size"):
             sub_block_size = int(arg)
         else:
             print colored("init> ", "red", attrs=['bold']) + "Unrecognized option " + str(opt)
@@ -171,8 +171,8 @@ csvfile_writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 
 # initialize the chart
 bar_chart = pygal.Bar()
-bar_chart.title = """Time to perform an Insert request varying the block size 
-with %s active subscriptions""" % (nsubs)
+bar_chart.title = """Time to perform an Insert request varying the number of
+subscriptions""" % (nsubs)
 
 # draw the chart and fill the csv file
 for kp in results.keys():
