@@ -2,6 +2,7 @@
 
 queries = []
 
+# Q1
 queries.append("""PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX dc:      <http://purl.org/dc/elements/1.1/>
 PREFIX dcterms: <http://purl.org/dc/terms/>
@@ -15,6 +16,7 @@ WHERE {
   ?journal dcterms:issued ?yr 
 }""")
 
+# Q2
 queries.append("""PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX swrc:    <http://swrc.ontoware.org/ontology#>
@@ -41,6 +43,7 @@ WHERE {
 }
 ORDER BY ?yr""")
 
+# Q3a
 queries.append("""PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX bench: <http://localhost/vocabulary/bench/>
 PREFIX swrc:  <http://swrc.ontoware.org/ontology#>
@@ -52,7 +55,7 @@ WHERE {
   FILTER (?property=swrc:pages) 
 }""")
 
-
+# Q3b
 queries.append("""PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX bench: <http://localhost/vocabulary/bench/>
 PREFIX swrc:  <http://swrc.ontoware.org/ontology#>
@@ -64,7 +67,7 @@ WHERE {
   FILTER (?property=swrc:month)
 }""")
 
-
+# Q3c
 queries.append("""PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX swrc:  <http://swrc.ontoware.org/ontology#>
 PREFIX bench: <http://localhost/vocabulary/bench/>
@@ -76,7 +79,7 @@ WHERE {
   FILTER (?property=swrc:isbn)
 }""")
 
-
+# Q4
 queries.append("""PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX bench:   <http://localhost/vocabulary/bench/>
 PREFIX dc:      <http://purl.org/dc/elements/1.1/>
@@ -97,7 +100,7 @@ WHERE {
   FILTER (?name1<?name2)
 }""")
 
-
+# Q5a
 queries.append("""PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX foaf:  <http://xmlns.com/foaf/0.1/>
 PREFIX bench: <http://localhost/vocabulary/bench/>
@@ -114,7 +117,7 @@ WHERE {
   FILTER (?name=?name2)
 }""")
 
-
+# Q5b
 queries.append("""PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX foaf:  <http://xmlns.com/foaf/0.1/>
 PREFIX bench: <http://localhost/vocabulary/bench/>
@@ -129,7 +132,7 @@ WHERE {
   ?person foaf:name ?name
 }""")
 
-
+# Q6
 queries.append("""PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf:    <http://xmlns.com/foaf/0.1/>
@@ -152,7 +155,7 @@ WHERE {
   } FILTER (!bound(?author2))
 }""")
 
-
+# Q7
 queries.append("""PREFIX rdf:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX foaf:    <http://xmlns.com/foaf/0.1/>
@@ -180,7 +183,7 @@ WHERE {
   } FILTER (!bound(?doc3))
 }""")
 
-
+# Q8
 queries.append("""PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#> 
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
@@ -208,7 +211,7 @@ WHERE {
   }
 }""")
 
-
+# Q9
 queries.append("""PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 
@@ -223,7 +226,7 @@ WHERE {
   }
 }""")
 
-
+# Q10
 queries.append("""PREFIX person: <http://localhost/persons/>
 
 SELECT ?subject ?predicate
@@ -231,7 +234,7 @@ WHERE {
   ?subject ?predicate person:Paul_Erdoes
 }""")
 
-
+# Q11
 queries.append("""PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 
 SELECT ?ee
@@ -242,7 +245,7 @@ ORDER BY ?ee
 LIMIT 10
 OFFSET 50""")
 
-
+# Q12a
 queries.append("""PREFIX rdf:   <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX foaf:  <http://xmlns.com/foaf/0.1/>
 PREFIX bench: <http://localhost/vocabulary/bench/>
@@ -258,7 +261,7 @@ ASK {
   FILTER (?name1=?name2)
 }""")
 
-
+# Q12b
 queries.append("""PREFIX xsd:  <http://www.w3.org/2001/XMLSchema#> 
 PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
@@ -285,7 +288,7 @@ ASK {
   }
 }""")
 
-
+# Q12c
 queries.append("""PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX person: <http://localhost/persons/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
