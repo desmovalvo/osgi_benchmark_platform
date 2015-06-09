@@ -67,6 +67,10 @@ g = rdflib.Graph()
 res = g.parse(n3file, format='n3')
 print "Done!"
 
+# clean both the SIBs
+for kp in kp_list:
+    kp.load_rdf_remove([Triple(None, None, None)])
+
 # insert the triples on both the SIBs
 print colored("init> ", "blue", attrs=['bold']) + "Starting the insertion"
 counter = 0
@@ -85,25 +89,47 @@ for triple in res:
         elif type(t).__name__  == "BNode":
             s.append( bNode(t.toPython()) )
 
+    ins_ok = False
     if len(s) == 3:
         counter += 1
-        tr = Triple(s[0], s[1], s[2])
-        triple_list.append(tr)
-        ins_ok = False
-        while ins_ok != True:
-            try:
-                if counter % 100 == 0:
+        triple_list.append(Triple(s[0], s[1], s[2]))
+        if counter % 100 == 0:            
+            while ins_ok != True:
+                try:
                     for kp in kp_list:
-                        kp.load_rdf_insert(triple_list)
-                        print colored("init> ", "blue", attrs=["bold"]) + "Insertion of triple " + str(counter) + " completed"
-                ins_ok = True
-                triple_list = []
-            except:
-                print traceback.print_exc()
-                print colored("init> ", "red", attrs=['bold']) + e.__str__()
-                print colored("init> ", "red", attrs=['bold']) + "Retrying insert in a while..."
-                time.sleep(3)            
+                        kp.load_rdf_insert(triple_list)                    
+                    ins_ok = True
+                    triple_list = []
+                    print colored("init> ", "blue", attrs=["bold"]) + "Insertion of triple " + str(counter) + " completed"
+                except:
+                    print traceback.print_exc()
+                    print colored("init> ", "red", attrs=['bold']) + e.__str__()
+                    print colored("init> ", "red", attrs=['bold']) + "Retrying insert in a while..."
+                    time.sleep(3)            
 
+while ins_ok != True:
+    try:
+        for kp in kp_list:
+            kp.load_rdf_insert(triple_list)                    
+        ins_ok = True
+        triple_list = []
+        print colored("init> ", "blue", attrs=["bold"]) + "Insertion of triple " + str(counter) + " completed"
+    except:
+        print traceback.print_exc()
+        print colored("init> ", "red", attrs=['bold']) + e.__str__()
+        print colored("init> ", "red", attrs=['bold']) + "Retrying insert in a while..."
+        time.sleep(3)            
+
+
+# check about the number of triples
+for kp in kp_list:
+    kp.load_query_rdf(Triple(None, None, None))
+    r = kp.result_rdf_query
+    print colored("init> ", "blue", attrs=["bold"]) + "%s contains %s triples" % (kp.__dict__["theSmartSpace"][0], str(len(r)))
+    if len(r) < counter:
+        print colored("init> ", "blue", attrs=["bold"]) + "%s contains less than %s triples" % (kp.__dict__["theSmartSpace"][0], counter)
+        sys.exit()
+    
 
 # iterate over kps
 results = {}
@@ -122,6 +148,8 @@ for kp in kp_list:
             try:
                 elapsed_time = timeit.timeit(lambda: kp.load_query_sparql(q), number = 1)
                 result.append(elapsed_time)
+                if i == 0:
+                    print len(kp.result_sparql_query)
             except Exception as e:
                 print colored("test> ", "red", attrs=["bold"]) + e.__str__()
             

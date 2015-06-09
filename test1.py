@@ -153,6 +153,9 @@ for kp in kp_list:
             # debug info    
             print colored("test> ", "blue", attrs=["bold"]) + "Insertion in progress - iteration %s" % (str(iteration))
     
+            # sleep
+            time.sleep(1)
+
             # insert
             try:
                 elapsed_time = timeit.timeit(lambda: kp.load_rdf_insert(triple_list), number = 1)
