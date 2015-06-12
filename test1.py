@@ -11,6 +11,7 @@ import datetime
 import traceback
 from termcolor import *
 from smart_m3.m3_kp_api import *
+from pygal.style import LightColorizedStyle
 
 # parameters
 # - sib ip:port
@@ -99,7 +100,7 @@ while not conn_ok:
     except Exception as e:
         print colored("init> ", "red", attrs=["bold"]) + e.__str__()
         print colored("init> ", "red", attrs=["bold"]) + "Error during connection, retrying in a while..."
-        time.sleep(3)
+        # time.sleep(3)
 
 # clean the SIBs
 clean_ok = False
@@ -112,7 +113,7 @@ while not clean_ok:
     except Exception as e:
         print colored("init> ", "red", attrs=["bold"]) + e.__str__()
         print colored("init> ", "red", attrs=["bold"]) + "Error while cleaning the SIB, retrying in a while..."
-        time.sleep(3)
+        # time.sleep(3)
 
 
 # initialize a dictionary with the results
@@ -154,7 +155,7 @@ for kp in kp_list:
             print colored("test> ", "blue", attrs=["bold"]) + "Insertion in progress - iteration %s" % (str(iteration))
     
             # sleep
-            time.sleep(1)
+            # time.sleep(1)
 
             # insert
             try:
@@ -166,7 +167,7 @@ for kp in kp_list:
             print colored("post-test> ", "blue", attrs=["bold"]) + "Cleaning the SIB"
             try:
                 kp.load_rdf_remove([Triple(None, None, None)])
-                res.append(elapsed_time)
+                res.append(elapsed_time * 1000)
             except:
                 print colored("post-test> ", "red", attrs=["bold"]) + "Failure while cleaning the SIB"
                 print traceback.print_exc()
@@ -178,10 +179,11 @@ for kp in kp_list:
     
         # elaborate results
         sum = 0
-        for r in range(len(res)):
-            sum += elapsed_time
+        for r in res:
+            sum += r
         results[kp.__dict__["theSmartSpace"][0]][(m+1) * block_size] = round(sum / len(res), 3)
-    
+
+print results    
 
 ############################################################
 #
@@ -194,9 +196,8 @@ csvfile = open(csv_filename, "w")
 csvfile_writer = csv.writer(csvfile, delimiter=',', quoting=csv.QUOTE_MINIMAL)
 
 # initialize the chart
-bar_chart = pygal.Bar()
-bar_chart.title = """Time to perform an Insert request varying the block size 
-with %s active subscriptions""" % (nsubs)
+bar_chart = pygal.Bar(style=LightColorizedStyle, x_title="Block size (n)", y_title="Time (ms)")
+bar_chart.title = """Time to insert n triples (%s active subscriptions)""" % (nsubs)
 
 # draw the chart and fill the csv file
 for kp in results.keys():
